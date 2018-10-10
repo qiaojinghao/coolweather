@@ -19,8 +19,20 @@ public class AreaAdapter extends RecyclerView.Adapter {
 
     LayoutInflater inflater;
 
+    private OnMyItemClickListener listener;
+
+    public interface OnMyItemClickListener{
+        void onClick(View v, int pos);
+    }
+
+    public void setOnMyClickListener(OnMyItemClickListener listener){
+        this.listener = listener;
+    }
+
     class AreaViewHolder extends RecyclerView.ViewHolder{
+
         @BindView(R.id.area_name) TextView areaName;
+
         public AreaViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
@@ -40,8 +52,17 @@ public class AreaAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
+        AreaViewHolder areaViewHolder =(AreaViewHolder) viewHolder;
+        areaViewHolder.areaName.setText(dataList.get(i));
+        if(listener != null){
+            areaViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClick(v, i);
+                }
+            });
+        }
     }
 
     @Override

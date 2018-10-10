@@ -75,7 +75,24 @@ public class ChooseAreaFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.choose_area, container, false);
         ButterKnife.bind(this,view);
-        recyclerView.setAdapter(new AreaAdapter(getContext(),dataList));
+
+        AreaAdapter mAdapter = new AreaAdapter(getContext(), dataList);
+
+        recyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnMyClickListener(new AreaAdapter.OnMyItemClickListener() {
+            @Override
+            public void onClick(View v, int pos) {
+                if(currentLevel == LEVEL_PROVINCE){
+                    selectedProvince = provinceList.get(pos);
+                    queryCities();
+                }else if(currentLevel == LEVEL_CITY){
+                    selectedCity = cityList.get(pos);
+                    queryCounties();
+                }
+            }
+        });
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         return view;
     }
@@ -83,6 +100,7 @@ public class ChooseAreaFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +115,7 @@ public class ChooseAreaFragment extends Fragment {
     }
 
     private void queryProvinces(){
-        
+
     }
 
     private void queryCities(){
